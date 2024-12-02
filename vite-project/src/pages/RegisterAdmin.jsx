@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import api from "../api"; // Use axios instance with token handling
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const RegisterAdmin = () => {
@@ -13,6 +13,11 @@ const RegisterAdmin = () => {
     setMessage("");
     setError("");
 
+    if (!email || !password) {
+      setError("All fields are required.");
+      return;
+    }
+
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/register-admin",
@@ -22,12 +27,14 @@ const RegisterAdmin = () => {
         }
       );
 
-      setMessage(response.data.message); // Success message
+      setMessage(response.data.message); // Display success message
       setEmail(""); // Clear the input fields
       setPassword("");
     } catch (err) {
-      setError(err.response?.data?.message || "Error registering admin.");
-      console.log(err);
+      const errorMsg =
+        err.response?.data?.message ||
+        "Error registering admin. Please try again.";
+      setError(errorMsg); // Display backend error or generic error
     }
   };
 
@@ -38,11 +45,13 @@ const RegisterAdmin = () => {
         onSubmit={handleSubmit}
       >
         <h2 className="text-3xl font-bold text-center mb-6">Register Admin</h2>
-        {message && <p className="text-green-500">{message}</p>}
-        {error && <p className="text-red-500">{error}</p>}
+        {message && (
+          <p className="text-green-500 text-center mb-4">{message}</p>
+        )}
+        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
         <div className="mb-4">
-          <label>Email</label>
+          <label className="block mb-1">Email</label>
           <input
             type="email"
             className="w-full p-3 bg-gray-700 rounded-lg"
@@ -53,7 +62,7 @@ const RegisterAdmin = () => {
         </div>
 
         <div className="mb-4">
-          <label>Password</label>
+          <label className="block mb-1">Password</label>
           <input
             type="password"
             className="w-full p-3 bg-gray-700 rounded-lg"
@@ -63,9 +72,20 @@ const RegisterAdmin = () => {
           />
         </div>
 
-        <button className="bg-blue-600 w-full py-2 rounded-lg hover:bg-blue-700">
+        <button
+          type="submit"
+          className="bg-blue-600 w-full py-2 rounded-lg hover:bg-blue-700"
+        >
           Register Admin
         </button>
+
+        {/* Link to Login */}
+        <p className="mt-4 text-center text-sm text-gray-400">
+          Already have an account?{" "}
+          <Link to="/login" className="text-blue-400 hover:underline">
+            Login here
+          </Link>
+        </p>
       </form>
     </div>
   );

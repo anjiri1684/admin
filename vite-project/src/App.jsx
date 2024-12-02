@@ -9,6 +9,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AddBeatPage from "./pages/AddBeatPage";
 import CustomersPage from "./pages/CustomersPage";
 import RegisterAdmin from "./pages/RegisterAdmin";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   const isAuthenticated = !!localStorage.getItem("authToken");
@@ -34,6 +35,7 @@ const App = () => {
           }
         />
         <Route path="/register-admin" element={<RegisterAdmin />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<Navigate to="/login" />} />
       </Routes>
     </Router>

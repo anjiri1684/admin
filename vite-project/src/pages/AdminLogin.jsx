@@ -1,6 +1,5 @@
 import { useState } from "react";
-// import api from "../api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 
 const AdminLogin = () => {
@@ -94,6 +93,16 @@ const AdminLogin = () => {
         >
           Login
         </button>
+
+        {/* Links */}
+        <div className="mt-4 flex justify-between text-sm text-gray-400">
+          <Link to="/reset-password" className="hover:underline">
+            Forgot Password?
+          </Link>
+          <Link to="/register-admin" className="hover:underline">
+            Register
+          </Link>
+        </div>
       </form>
     </div>
   );
