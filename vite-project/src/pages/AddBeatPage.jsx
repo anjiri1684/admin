@@ -11,30 +11,10 @@ const AddBeatPage = () => {
   const [imageFile, setImageFile] = useState(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // New state for loading
 
-  const handleAudioChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.size > 10 * 1024 * 1024) {
-      // 10MB limit
-      setError("Audio file size should not exceed 10MB.");
-      setAudioFile(null);
-    } else {
-      setAudioFile(file);
-      setError(""); // Clear any previous error
-    }
-  };
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.size > 5 * 1024 * 1024) {
-      // Optional: 5MB for image
-      setError("Image file size should not exceed 5MB.");
-      setImageFile(null);
-    } else {
-      setImageFile(file);
-      setError(""); // Clear any previous error
-    }
-  };
+  const handleAudioChange = (e) => setAudioFile(e.target.files[0]);
+  const handleImageChange = (e) => setImageFile(e.target.files[0]);
 
   const handleAddBeat = async (e) => {
     e.preventDefault();
@@ -43,6 +23,8 @@ const AddBeatPage = () => {
       setError("Both audio and image files are required.");
       return;
     }
+
+    setLoading(true); // Set loading state to true when starting the upload
 
     try {
       const formData = new FormData();
@@ -67,9 +49,10 @@ const AddBeatPage = () => {
     } catch (err) {
       console.error("Upload error:", err.message);
       setError(
-        err.response?.data?.message ||
-          "An unexpected error occurred. Please try again."
+        err.response?.data?.message || "Error adding beat. Please try again."
       );
+    } finally {
+      setLoading(false); // Set loading state to false when upload is finished
     }
   };
 
@@ -80,7 +63,6 @@ const AddBeatPage = () => {
     setPrice("");
     setAudioFile(null);
     setImageFile(null);
-    setMessage(""); // Clear success message
     document.querySelector("#audio-input").value = "";
     document.querySelector("#image-input").value = "";
   };
@@ -90,8 +72,14 @@ const AddBeatPage = () => {
       <Navbar />
       <div className="container mx-auto p-6">
         <h2 className="text-3xl font-bold mb-4">Add Beat</h2>
+
+        {/* Show success or error message */}
         {message && <p className="text-green-500">{message}</p>}
         {error && <p className="text-red-500">{error}</p>}
+
+        {/* Show loading spinner or message */}
+        {loading && <p className="text-blue-500">Uploading...</p>}
+
         <form className="bg-gray-800 p-6 rounded-lg" onSubmit={handleAddBeat}>
           <div className="mb-4">
             <label>Title</label>
@@ -140,7 +128,7 @@ const AddBeatPage = () => {
               id="audio-input"
               className="w-full p-2 bg-gray-700 rounded"
               onChange={handleAudioChange}
-              accept=".mp3,.wav"
+              accept="audio/*"
               required
             />
           </div>
@@ -155,7 +143,13 @@ const AddBeatPage = () => {
               required
             />
           </div>
-          <button className="bg-green-600 w-full py-2 rounded">Add Beat</button>
+          <button
+            type="submit"
+            className="bg-green-600 w-full py-2 rounded"
+            disabled={loading} // Disable the button while uploading
+          >
+            {loading ? "Uploading..." : "Add Beat"}
+          </button>
         </form>
       </div>
     </div>
