@@ -12,8 +12,29 @@ const AddBeatPage = () => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  const handleAudioChange = (e) => setAudioFile(e.target.files[0]);
-  const handleImageChange = (e) => setImageFile(e.target.files[0]);
+  const handleAudioChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.size > 10 * 1024 * 1024) {
+      // 10MB limit
+      setError("Audio file size should not exceed 10MB.");
+      setAudioFile(null);
+    } else {
+      setAudioFile(file);
+      setError(""); // Clear any previous error
+    }
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.size > 5 * 1024 * 1024) {
+      // Optional: 5MB for image
+      setError("Image file size should not exceed 5MB.");
+      setImageFile(null);
+    } else {
+      setImageFile(file);
+      setError(""); // Clear any previous error
+    }
+  };
 
   const handleAddBeat = async (e) => {
     e.preventDefault();
@@ -46,7 +67,8 @@ const AddBeatPage = () => {
     } catch (err) {
       console.error("Upload error:", err.message);
       setError(
-        err.response?.data?.message || "Error adding beat. Please try again."
+        err.response?.data?.message ||
+          "An unexpected error occurred. Please try again."
       );
     }
   };
@@ -58,6 +80,7 @@ const AddBeatPage = () => {
     setPrice("");
     setAudioFile(null);
     setImageFile(null);
+    setMessage(""); // Clear success message
     document.querySelector("#audio-input").value = "";
     document.querySelector("#image-input").value = "";
   };
@@ -117,7 +140,7 @@ const AddBeatPage = () => {
               id="audio-input"
               className="w-full p-2 bg-gray-700 rounded"
               onChange={handleAudioChange}
-              accept="audio/*"
+              accept=".mp3,.wav"
               required
             />
           </div>
