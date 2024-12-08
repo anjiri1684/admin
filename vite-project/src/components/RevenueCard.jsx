@@ -9,7 +9,9 @@ const RevenueCard = () => {
   useEffect(() => {
     const fetchRevenue = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/admin/revenue");
+        const { data } = await axios.get(
+          "https://www.api.nivabeats.com/admin/revenue"
+        );
         console.log(data); // Log response data
         setRevenue(data.totalRevenue || 0);
       } catch (err) {

@@ -11,7 +11,7 @@ const CustomersPage = () => {
     const fetchCustomers = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/admin/customers",
+          "https://niva-beats-backend.vercel.app/api/admin/customers",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("authToken")}`,

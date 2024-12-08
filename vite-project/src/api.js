@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://localhost:5000", // Hardcoded base URL for your backend
+  baseURL: "https://niva-beats-backend.vercel.app",
 });
 
 // Request Interceptor: Attach token to Authorization header

@@ -20,7 +20,7 @@ const AdminLogin = () => {
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/api/auth/login-admin",
+        "https://niva-beats-backend.vercel.app/api/auth/login-admin",
         formData
       );
 
